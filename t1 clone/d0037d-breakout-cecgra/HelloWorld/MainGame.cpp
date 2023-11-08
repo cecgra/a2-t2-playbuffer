@@ -1,6 +1,7 @@
 #define PLAY_IMPLEMENTATION
 #define PLAY_USING_GAMEOBJECT_MANAGER
 #include "Play.h"
+//PLAYBUFFER LISTING 9
 
 int DISPLAY_WIDTH = 1280;
 int DISPLAY_HEIGHT = 720;
@@ -28,6 +29,7 @@ enum GameObjectType
 void HandlePlayerControls();
 void UpdateFan();
 void UpdateTools();
+void UpdateCoinsAndStars();
 
 // The entry point for a PlayBuffer program
 void MainGameEntry(PLAY_IGNORE_COMMAND_LINE)
@@ -49,6 +51,7 @@ bool MainGameUpdate(float elapsedTime)
 	HandlePlayerControls();
 	UpdateFan();
 	UpdateTools();
+	UpdateCoinsAndStars();
 	Play::PresentDrawingBuffer();
 	return Play::KeyDown(VK_ESCAPE);
 }
@@ -105,6 +108,13 @@ void UpdateFan()
 			obj_tool.rotSpeed = 0.1f;
 		}
 		Play::PlayAudio("tool");
+	}
+	if (Play::RandomRoll(150) == 1)
+	{
+		int id = Play::CreateGameObject(TYPE_COIN, obj_fan.pos, 40, "coin");
+		GameObject& obj_coin = Play::GetGameObject(id);
+		obj_coin.velocity = { -3,0 };
+		obj_coin.rotSpeed = 0.1f;
 	}
 	Play::UpdateGameObject(obj_fan);
 
